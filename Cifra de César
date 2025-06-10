@@ -1,0 +1,81 @@
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+#include <locale.h>
+#include <ctype.h>
+
+void cripto(char *fra);
+void decripto(char *fra);
+
+int main() {
+    setlocale(LC_ALL, "Portuguese");
+
+    char frase[100], opcao;
+
+    do {
+        printf("C - Criptografar\nD - Decriptografar\nS - Sair\nDigite a opção: ");
+        scanf(" %c", &opcao);
+        opcao = tolower(opcao);
+        getchar();
+        system("cls");
+
+        switch (opcao) {
+            case 'c':
+                printf("Digite a frase: ");
+                fgets(frase, sizeof(frase), stdin);
+                frase[strcspn(frase, "\n")] = '\0';
+                cripto(frase);
+                printf("Frase criptografada: %s\n", frase);
+                break;
+
+            case 'd':
+                printf("Digite a frase: ");
+                fgets(frase, sizeof(frase), stdin);
+                frase[strcspn(frase, "\n")] = '\0';
+                decripto(frase);
+                printf("Frase decriptografada: %s\n", frase);
+                break;
+
+            case 's':
+                printf("Fim do programa.\n");
+                break;
+
+            default:
+                printf("Opção inválida.\n");
+        }
+    } while (opcao != 's');
+
+    return 0;
+}
+
+void cripto(char *fra) {
+    char alfa[] = "abcdefghijklmnopqrstuvxyz";
+    char cod[]  = "ghijklmnopqrstuvxyzabcdef";
+    int i, x, l = strlen(fra);
+
+    for (i = 0; i < l; i++) {
+        char letra = tolower(fra[i]);
+        for (x = 0; x < 24; x++) {
+            if (letra == alfa[x]) {
+                fra[i] = cod[x];
+                break;
+            }
+        }
+    }
+}
+
+void decripto(char *fra) {
+    char alfa[] = "abcdefghijklmnopqrstuvxyz";
+    char cod[]  = "ghijklmnopqrstuvxyzabcdef";
+    int i, x, l = strlen(fra);
+
+    for (i = 0; i < l; i++) {
+        char letra = tolower(fra[i]);
+        for (x = 0; x < 24; x++) {
+            if (letra == cod[x]) {
+                fra[i] = alfa[x];
+                break;
+            }
+        }
+    }
+}
