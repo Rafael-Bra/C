@@ -1,0 +1,371 @@
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+#include <locale.h>
+
+int cm = 0,dm = 0,um = 0,ck = 0,dk = 0,uk = 0, milhar = 0, milhao = 0, casas = 0;
+void fracionar (int valor, char *nuext, int sexo, int tipo);
+void escrita (int c, int d, int u, char *next, int sexo);
+void ordinal (int c, int d, int u, char *nxt, int sexo);
+
+main()
+{
+    setlocale(LC_ALL, "Portuguese");
+    int valor, sexo, tipo;
+    char numero[500];
+    printf("Digite o valor entre 0 e 999.999.999: ");
+    scanf("%i", &valor);
+    printf("Digite o sexo (0 para masculino e 1 para feminino): ");
+    scanf("%d", &sexo);
+    printf("Digite o tipo (0 para cardinal e 1 para ordinal): ");
+    scanf("%i", &tipo);
+    system ("cls");
+    fracionar(valor, numero, sexo, tipo);
+    printf("\nNúmero extenso: %s", numero);
+    printf("\n========================================================================================================================\n");
+}
+void fracionar (int valor, char *nuext, int sexo, int tipo)
+{
+    int sair = 0, resto = valor, sint = 0, c=0, d=0, u=0;
+    if ((valor < 0) || (valor > 999999999))
+    {
+        printf("\n\nValor fora do intervalo válido 0-999.999.999");
+    }
+    else
+    {
+        if (valor >= 1000000)
+        {
+            milhao = 1;
+        }
+        cm = resto / 100000000;
+        resto = resto % 100000000;
+        dm = resto / 10000000;
+        resto = resto % 10000000;
+        um = resto / 1000000;
+        resto = resto % 1000000;
+        if (resto >= 1000)
+        {
+            milhar = 1;
+        }
+        ck = resto / 100000;
+        resto = resto % 100000;
+        dk = resto / 10000;
+        resto = resto % 10000;
+        uk = resto / 1000;
+        resto = resto % 1000;
+        if (resto == 0)
+        {
+            sint = 1;
+        }
+        c = (int) resto / 100;
+        d = (int) ((resto % 100) / 10);
+        u = (int) ((resto % 100) % 10);
+    }
+//quebra do maior valor
+    strcpy(nuext,"");
+//limpeza
+    //programa funcionando
+    if (milhao == 1)
+    {
+        if (tipo == 0)
+        {
+            if (cm == 0 && dm == 0 && um == 1)
+            {
+                strcat(nuext, "um milhão");
+                sair = 1;
+            }
+            if(sair == 0)
+            {
+                if (cm == 1 && dm == 0 && um == 0)
+                {
+                    strcat(nuext, " cem ");
+                }
+                else
+                {
+                    escrita(cm, dm, um, nuext, sexo);
+                }
+                strcat(nuext, " milhões");
+            }
+            if (milhar == 1 && sint == 0)
+            {
+                strcat(nuext,", ");
+            }
+            else
+            {
+                strcat(nuext, " e ");
+            }
+        }
+        else
+        {
+            if (tipo == 1)
+            {
+                escrita(cm, dm, um, nuext, sexo);
+                if (sexo == 0)
+                {
+                    strcat(nuext," milionésimo ");
+                }
+                else
+                {
+                    strcat(nuext," milionésima ");
+                }
+            }
+        }
+    }
+    //milhao
+    sair = 0;
+    //zeramento do sair
+    if (milhar == 1)
+    {
+        if (tipo == 0)
+        {
+            if (ck == 0 && dk == 0 && uk ==1)
+            {
+                strcat(nuext, " mil ");
+            }
+            else
+            {
+                if (ck == 1 && dk == 0 && uk == 0)
+                {
+                    strcat(nuext, " cem ");
+                }
+                else
+                {
+                    escrita(ck, dk, uk, nuext, sexo);
+                }
+                strcat(nuext, " mil ");
+            }
+        }
+        else
+        {
+            escrita(ck, dk, uk, nuext, sexo);
+            if (sexo == 0)
+            {
+                strcat(nuext, " milésimo ");
+            }
+            else
+            {
+                strcat(nuext, " milésima ");
+            }
+        }
+    }
+    if (sint != 1 && c == 0 && milhar == 1)
+    {
+        strcat(nuext, "e ");
+    }
+    //casa dos milhares
+    casas = 1;
+    if (tipo == 0)
+    {
+        if (resto == 100)
+        {
+            if (milhar == 1)
+            {
+                strcat(nuext, "e ");
+            }
+            strcat(nuext, "cem");
+        }
+        else
+        {
+            escrita(c, d, u, nuext, sexo);
+        }
+    }
+    else
+    {
+        ordinal(c,d,u,nuext,sexo);
+    }
+}
+void escrita (int c, int d, int u, char *next, int sexo)
+{
+    char centena [10] [100], dezena [10] [100], unidade [10] [100], casoespecial [10] [100], cf [10] [100], uf [10] [100];
+    int sair = 0;
+    if (casas == 1)
+    {
+        printf("========================================================================================================================\n");
+        printf("Centenas de milhão (cm): %d - Dezenas de milhão (dm): %d - Unidades de milhão (um): %d \nCentenas de milhar (ck): %d - Dezenas de milhar (dk): %d - Unidades de milhar (uk): %d \nCentenas (c): %d - Dezenas (d): %d - Unidades (u): %d\n", cm, dm, um, ck, dk, uk, c, d, u);
+    }
+    //programa funcionando
+    strcpy(centena[0], "");
+    strcpy(centena [1], "cento");
+    strcpy(centena [2], "duzentos");
+    strcpy(centena [3], "trezentos");
+    strcpy(centena [4], "quatrocentos");
+    strcpy(centena [5], "quinhentos");
+    strcpy(centena [6], "seiscentos");
+    strcpy(centena [7], "setecentos");
+    strcpy(centena [8], "oitocentos");
+    strcpy(centena [9], "novecentos");
+    //centena
+    strcpy(cf[0],"");
+    strcpy(cf[1],"cento");
+    strcpy(cf[2],"duzentas");
+    strcpy(cf[3],"trezentas");
+    strcpy(cf[4],"quatrocentas");
+    strcpy(cf[5],"quinhentas");
+    strcpy(cf[6],"seiscentas");
+    strcpy(cf[7],"setecentas");
+    strcpy(cf[8],"oitocentas");
+    strcpy(cf[9],"novecentas");
+    //feminino
+    strcpy(dezena[0],"");
+    strcpy(dezena[1],"dez");
+    strcpy(dezena[2],"vinte");
+    strcpy(dezena[3],"trinta");
+    strcpy(dezena[4],"quarenta");
+    strcpy(dezena[5],"cinquenta");
+    strcpy(dezena[6],"sessenta");
+    strcpy(dezena[7],"setenta");
+    strcpy(dezena[8],"oitenta");
+    strcpy(dezena[9],"noventa");
+    //unidade
+    strcpy(unidade[0],"");
+    strcpy(unidade[1],"um");
+    strcpy(unidade[2],"dois");
+    strcpy(unidade[3],"três");
+    strcpy(unidade[4],"quatro");
+    strcpy(unidade[5],"cinco");
+    strcpy(unidade[6],"seis");
+    strcpy(unidade[7],"sete");
+    strcpy(unidade[8],"oito");
+    strcpy(unidade[9],"nove");
+    //unidade
+    strcpy(casoespecial[0],"");
+    strcpy(casoespecial[1],"onze");
+    strcpy(casoespecial[2],"doze");
+    strcpy(casoespecial[3],"treze");
+    strcpy(casoespecial[4],"quatorze");
+    strcpy(casoespecial[5],"quinze");
+    strcpy(casoespecial[6],"dezesseis");
+    strcpy(casoespecial[7],"dezessete");
+    strcpy(casoespecial[8],"dezoito");
+    strcpy(casoespecial[9],"dezenove");
+    //unidade feminino
+    strcpy(uf[0],"");
+    strcpy(uf[1],"uma");
+    strcpy(uf[2],"duas");
+    strcpy(uf[3],"três");
+    strcpy(uf[4],"quatro");
+    strcpy(uf[5],"cinco");
+    strcpy(uf[6],"seis");
+    strcpy(uf[7],"sete");
+    strcpy(uf[8],"oito");
+    strcpy(uf[9],"nove");
+    //escrita
+    if (casas == 1 ){
+    if (milhar == 1 && (c != 0 && d == 0 && u == 0))
+    {
+        strcat(next, "e ");
+    }
+    }
+    //tratamento do 'e' para centenas redondas
+    if (sexo == 0)
+    {
+        strcat(next, centena [c]);
+    }
+    else
+    {
+        strcat(next, cf [c]);
+    }
+    if (c != 0)
+    {
+        if (d != 0 || u != 0)
+        {
+            strcat(next, " e ");
+        }
+    }
+    //centena
+    if (d == 1 && u != 0)
+    {
+        strcat(next, casoespecial[u]);
+        sair = 1;
+    }
+    if (sair == 0)
+    {
+        strcat(next, dezena [d]);
+        if (u != 0 && d != 0)
+        {
+            strcat(next, " e ");
+        }
+    }
+    //dezena
+    if (sair == 0)
+    {
+        if (sexo == 0)
+        {
+            strcat(next, unidade [u]);
+        }
+        else
+        {
+            strcat(next, uf [u]);
+        }
+    }
+    //unidade
+}
+void ordinal (int c, int d, int u, char *nxt, int sexo)
+{
+    char uord [10] [100], dord [10] [100], cord [10] [100];
+    printf("Centenas de milhão (cm): %d - Dezenas de milhão (dm): %d - Unidades de milhão (um): %d \nCentenas de milhar (ck): %d - Dezenas de milhar (dk): %d - Unidades de milhar (uk): %d \nCentenas (c): %d - Dezenas (d): %d - Unidades (u): %d\n", cm, dm, um, ck, dk, uk, c, d, u);
+    //escrita das casas decimais
+    strcpy(uord [0], "");
+    strcpy(uord [1], "primeir");
+    strcpy(uord [2], "segund");
+    strcpy(uord [3], "terceir");
+    strcpy(uord [4], "quart");
+    strcpy(uord [5], "quint");
+    strcpy(uord [6], "sext");
+    strcpy(uord [7], "sétim");
+    strcpy(uord [8], "oitav");
+    strcpy(uord [9], "non");
+    //unidade ordinal
+    strcpy(dord [0], "");
+    strcpy(dord [1], "décim");
+    strcpy(dord [2], "vigésim");
+    strcpy(dord [3], "trigésim");
+    strcpy(dord [4], "quadragésim");
+    strcpy(dord [5], "quinquagésim");
+    strcpy(dord [6], "sexagésim");
+    strcpy(dord [7], "septuagésim");
+    strcpy(dord [8], "octagésim");
+    strcpy(dord [9], "nonagésim");
+    //dezena ordinal
+    strcpy(cord [0], "");
+    strcpy(cord [1], "centésim");
+    strcpy(cord [2], "ducentésim");
+    strcpy(cord [3], "tricentésim");
+    strcpy(cord [4], "quadrigentésim");
+    strcpy(cord [5], "quingentésim");
+    strcpy(cord [6], "seiscentésim");
+    strcpy(cord [7], "septigentésim");
+    strcpy(cord [8], "octigentésim");
+    strcpy(cord [9], "nongentésim");
+    //escrita do array
+    strcat(nxt, cord [c]);
+    if (sexo == 0)
+    {
+        strcat(nxt,"o ");
+    }
+    else
+    {
+        strcat(nxt, "a ");
+    }
+    //centena
+    strcat(nxt, dord [d]);
+    if (sexo == 0)
+    {
+        strcat(nxt,"o ");
+    }
+    else
+    {
+        strcat(nxt, "a ");
+    }
+    //dezena
+    strcat(nxt, uord [u]);
+    if (sexo == 0)
+    {
+        strcat(nxt,"o ");
+    }
+    else
+    {
+        strcat(nxt, "a ");
+    }
+    //unidade
+}
