@@ -1,0 +1,142 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <locale.h>
+
+main()
+{
+    setlocale(LC_ALL,"Portuguese");
+    int lina, cola, linf, colf, i, j, linb, colb, trava;
+    char mapa [10] [10];
+    srand(time(NULL));
+    linb = rand() % 10;
+    colb = rand() % 10;
+    for (i =0; i != 10; i++)
+    {
+        for(j =0; j !=10; j++)
+        {
+            mapa [i] [j] = '#';
+        }
+    }
+    mapa [linb] [colb] = 'O';
+    printf("=================================================================================\n");
+    printf("Digite o número da linha inicial(0 - 9): ");
+    scanf("%i", &lina);
+    printf("\nDigite o número da coluna inicial(0 - 9): ");
+    scanf("%i", &cola);
+    mapa [lina] [cola] = 'A';
+    printf("\nDigite o número da linha final(0 - 9): ");
+    scanf("%i", &linf);
+    printf("\nDigite o número da coluna final(0 - 9): ");
+    scanf("%i", &colf);
+    printf("\n=================================================================================");
+    system("cls");
+    mapa [linf] [colf] = 'B';
+    while(lina != linf || cola != colf)
+    {
+        trava = 1;
+        //programa rodando
+        if (lina < linf && mapa [lina + 1] [cola] != 'O')
+        {
+            lina = lina + 1;
+            trava = 0;
+        }
+        if (lina > linf && mapa [lina - 1] [cola] != 'O')
+        {
+            lina = lina - 1;
+            trava = 0;
+        }
+        if (cola < colf && mapa [lina] [cola + 1] != 'O')
+        {
+            cola = cola + 1;
+            trava = 0;
+        }
+        if (cola > colf && mapa [lina] [cola - 1] != 'O')
+        {
+            cola = cola - 1;
+            trava = 0;
+        }
+        //programa rodando
+        if (lina != 9)
+        {
+            if (trava == 1 && lina == linf && cola < colf)
+            {
+                lina = lina + 1;
+                cola = cola + 1;
+                mapa [lina] [cola] = 'X';
+
+            }
+            if (trava == 1 && lina == linf && cola > colf)
+            {
+                lina = lina + 1;
+                cola = cola - 1;
+                mapa [lina] [cola] = 'X';
+            }
+        }
+        //Limites inferior e superior
+        if (lina == 9)
+        {
+            if (trava == 1 && lina == linf && cola < colf)
+            {
+                lina = lina - 1;
+                cola = cola + 1;
+                mapa [lina] [cola] = 'X';
+            }
+            if (trava == 1 && lina == linf && cola > colf)
+            {
+                lina = lina - 1;
+                cola = cola - 1;
+                mapa [lina] [cola] = 'X';
+            }
+        }
+        //programa rodando
+        //vertical
+        if (cola != 9){
+        if (trava == 1 && lina > linf)
+        {
+            cola +=  1;
+            lina -= 1;
+            trava = 3;
+            mapa [lina] [cola] = 'X';
+        }
+        if (trava == 1 && lina < linf)
+        {
+            cola += 1;
+            lina += 1;
+            mapa [lina] [cola] = 'X';
+        }
+        }
+        //vertical
+        if (cola == 9){
+        if (trava == 1 && lina > linf)
+        {
+            cola -=  1;
+            lina -= 1;
+            mapa [lina] [cola] = 'X';
+        }
+        if (trava == 1 && lina < linf)
+        {
+            cola -= 1;
+            lina += 1;
+            mapa [lina] [cola] = 'X';
+        }
+        }
+        //finalização
+        if (mapa [lina] [cola] == '#')
+        {
+            mapa [lina] [cola] = 'X';
+        }
+        //programa rodando
+    }
+    printf("=================================================================================\n");
+    for (i =0; i != 10; i++)
+    {
+        for(j =0; j !=10; j++)
+        {
+            printf("%c", mapa [i] [j]);
+        }
+        printf("\n");
+    }
+    printf("\nLegenda\n\nA - Ponto Inicial\nB - Ponto Final\nX - Caminho\nO - Buraco\n");
+    printf("=================================================================================\n");
+}
