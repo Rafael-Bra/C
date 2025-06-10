@@ -1,0 +1,110 @@
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+#include <locale.h>
+#define TAMANHO 10
+
+struct carros
+{
+    char marca[50];
+    char modelo[50];
+    char placa[10];
+    int ano;
+    char cor[10];
+} frota[TAMANHO];
+
+
+main()
+{
+    setlocale(LC_ALL, "Portuguese");
+    int i, sair = 0, escolha = 0, del, full;
+    char plc[10];
+    do
+    {
+        printf("1 - Cadastrar veículo\n2 - Excluir veículo\n3 - Listar veículos\n4 - Sair");
+        printf("\nEscolha uma opção: ");
+        scanf("%i", &escolha);
+        getchar();
+        switch (escolha)
+        {
+        case 1:
+            system("cls");
+            full = 1;
+            for (i=0; i<TAMANHO; i++) //Percorre o vetor frota preenchendo-o com os valores requeridos.
+            {
+                if(frota[i].ano == 0)
+                {
+                    printf("Digite os dados do veículo %d \n",i+1);
+                    printf("marca: ");
+                    gets(frota[i].marca);
+                    printf("modelo: ");
+                    gets(frota[i].modelo);
+                    printf("ano: ");
+                    scanf("%i",&frota[i].ano);
+                    getchar();
+                    printf("cor: ");
+                    gets(frota[i].cor);
+                    printf("Placa: ");
+                    gets(frota[i].placa);
+                    full = 0;
+                    system ("cls");
+                    printf("\nVeículo cadastrado\n\n");
+                    break;
+                }
+                if(i == 9 && full == 1)
+                {
+                    printf("\nLimite de veículos cadastrados alcançado\n");
+                }
+            }
+            break;
+        case 2:
+
+            printf("\nDigite a placa do veículo: ");
+            gets(plc);
+            for (i = 0; i < TAMANHO; i++)
+            {
+                del = strcmp(frota[i].placa, plc);
+                if(del == 0)
+                {
+                    strcpy(frota[i].cor, "");
+                    strcpy(frota[i].marca, "");
+                    strcpy(frota[i].modelo, "");
+                    strcpy(frota[i].placa, "");
+                    frota[i].ano = 0;
+                    system ("cls");
+                    printf("\nVeículo excluido\n");
+                    break;
+                }
+            }
+            break;
+        case 3:
+            system ("cls");
+            printf("\n____________________________________________ \n");
+            printf("\nDados digitados: \n \n");
+
+            for (i=0; i<TAMANHO; i++) // Percorre o vetor frota escrevendo os valores armazenados.
+            {
+                if(frota[i].ano != 0)
+                {
+                    printf("Dados do veículo %d\n",i+1);
+                    printf("marca: %s \n",frota[i].marca);
+                    printf("modelo: %s \n",frota[i].modelo);
+                    printf("ano: %i \n",frota[i].ano);
+                    printf("cor: %s \n",frota[i].cor);
+                    printf("placa: %s \n",frota[i].placa);
+                    printf(" ____________________________________________ \n");
+                }
+            }
+            break;
+        case 4:
+            sair = 1;
+            break;
+        default:
+            system("cls");
+            printf("\nCódigo incorreto\n");
+            break;
+        }
+    }
+    while(sair !=1);
+    printf("\nFinalizando");
+}
